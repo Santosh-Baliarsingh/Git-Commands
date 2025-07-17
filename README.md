@@ -12,10 +12,16 @@ This repository contains a comprehensive list of Git commands and their usage ex
   - [Staging and Committing](#staging-and-committing)
   - [Viewing Status and Logs](#viewing-status-and-logs)
   - [Branching](#branching)
+    - [Change `Branch` Name after Creation](#change-branch-name-after-creation)
   - [Merging and Rebasing](#merging-and-rebasing)
   - [Remote Repositories](#remote-repositories)
   - [Stashing](#stashing)
   - [Resetting and Restoring](#resetting-and-restoring)
+  - [Tagging (LightWeight)](#tagging-lightweight)
+  - [Tagging (Anotated)](#tagging-anotated)
+    - [Notes on Tags](#notes-on-tags)
+  - [Change Repository Name after Creation](#change-repository-name-after-creation)
+    - [change the name of your repository from `old-repo-name` to `new-repo-name` on GitHub](#change-the-name-of-your-repository-from-old-repo-name-to-new-repo-name-on-github)
   - [Miscellaneous](#miscellaneous)
   - [Should do and Shouldn't do](#should-do-and-shouldnt-do)
     - [Should Do](#should-do)
@@ -406,6 +412,26 @@ This repository contains a comprehensive list of Git commands and their usage ex
 
     This command will remove the `feature-branch` from the remote repository.
 
+### Change `Branch` Name after Creation
+
+1. **Make sure you are on the branch you want to rename switch to branch:**
+
+   - **`git switch <branch_name>`**
+
+2. **Rename the branch:**
+
+   - **`git branch -m <branch_name>`**
+
+   - **Note- If you haven’t pushed the `branch` yet, you’re done. But if you already pushed and need to update the `remote`**
+
+3. **Pushed the `branch` to `remote`**
+
+   - `git push origin -u <branch_name>`
+
+4. **Delete the old `branch` on `remote` (only if already pushed)**
+
+   - `git push origin --delete <branch_name>`
+
 ## Merging and Rebasing
 
 1. **`git merge <branch_name>`**  
@@ -523,9 +549,9 @@ This repository contains a comprehensive list of Git commands and their usage ex
 9. **`git clone <https>`**  
     Clone a specific repository.
 
-     ```sh
-   git clone https://github.com/user/repo.git
-   ```
+    ```sh
+    git clone https://github.com/user/repo.git
+    ```
 
 10. **`git checkout origin/<branch_name>`**  
     Checkout a branch from a remote repository.
@@ -535,6 +561,48 @@ This repository contains a comprehensive list of Git commands and their usage ex
 
     ```sh
     git checkout origin/main
+    ```
+
+11. **`git remote -v`**  
+    Display the URLs of the remote repositories associated with your local Git repository. It shows both the fetch and push URLs for each remote.
+
+    **Example:**
+    Suppose you want to see the URLs of the remote repositories configured for your local repository.
+
+    ```sh
+    git remote -v
+    ```
+
+    This command will output a list of remote repositories along with their fetch and push URLs. For example:
+
+    ```sh
+    origin  https://github.com/user/repo.git (fetch)
+    origin  https://github.com/user/repo.git (push)
+    ```
+
+12. **`git remote add upstream <owners original repo link>`**  
+    This command is used to add a new remote repository to your local Git repository. This is commonly used in forked repositories to keep your fork up-to-date with the original repository. Replace `<owners original repo link>` with the URL of the original repository you forked from. After that, verify the remote upstream has been added using `git remote -v`.
+
+    **Example:**
+    Suppose you have forked a repository from `https://github.com/owner/repository.git` and you want to add it as an upstream remote to your local repository.
+
+    ```sh
+    git remote add upstream https://github.com/owner/repository.git
+    ```
+
+    After adding the upstream remote, you can verify it by running:
+
+    ```sh
+    git remote -v
+    ```
+
+    You should see output similar to this:
+
+    ```sh
+    origin    https://github.com/yourusername/repository.git (fetch)
+    origin    https://github.com/yourusername/repository.git (push)
+    upstream  https://github.com/owner/repository.git (fetch)
+    upstream  https://github.com/owner/repository.git (push)
     ```
 
 ## Stashing
@@ -703,6 +771,173 @@ This repository contains a comprehensive list of Git commands and their usage ex
     ```
 
     This command will switch your working directory to the [`master`] branch.
+
+## Tagging (LightWeight)
+
+1. **`git tag <version>`**  
+    This command is used to create a lightweight tag for the current commit. Tags are often used to mark release points (e.g., v1.0.0, v2.0.0) in your project's history.
+
+    **Example:**
+    To create a tag named `v1.0.1` for the current commit, you would use the following command:
+
+    ```sh
+    git tag v1.0.1
+    ```
+
+2. **`git tag <version> <commit hash>`**  
+    This command is used to create a lightweight tag for a specific commit. This is useful when you want to tag a commit that is not the current commit, such as an earlier commit in the project's history.
+
+    **Example:**
+    To create a tag named `v1.2.0` for a specific commit with the hash `a9h0b2`, you would use the following command:
+
+    ```sh
+    git tag v1.2.0 a9h0b2
+    ```
+
+3. **`git tag -d <version>`**  
+    This command is used to delete a tag from your local repository. It does not affect the remote repository.
+
+    **Example:**
+    To delete a tag named `v1.2.1` from your local repository, you would use the following command:
+
+    ```sh
+    git tag -d v1.2.1
+    ```
+
+4. **`git push origin :refs/tags/<version>`**  
+    This command is used to delete a tag from the remote repository. The syntax involves pushing an empty reference to the tag, effectively removing it from the remote.
+
+    **Example:**
+    To delete a tag named `v1.2.1` from the remote repository, you would use the following command:
+
+    ```sh
+    git push origin :refs/tags/v1.2.1
+    ```
+
+5. **`git push origin <version>`**  
+    This command is used to push a single tag to the remote repository. This is useful when you have created a new tag locally and want to share it with others by pushing it to the remote repository.
+
+    **Example:**
+    To push a tag named `v1.5.0` to the remote repository, you would use the following command:
+
+    ```sh
+    git push origin v1.5.0
+    ```
+
+6. **`git push origin --tags`**  
+    This command is used to push all local tags to the remote repository. This is useful when you have created multiple tags locally and want to push them all to the remote repository in one go.
+
+    **Example:**
+    To push all local tags to the remote repository, you would use the following command:
+
+    ```sh
+    git push origin --tags
+    ```
+
+## Tagging (Anotated)
+
+1. **`git log --oneline`**  
+    This command is used to display the commit history in a compact format. You can use it to find and copy the commit hash you want to tag.
+
+    **Example:**
+
+    ```sh
+    git log --oneline
+    ```
+
+2. **`git tag -a <version> <commit hash> -m "tag message"`**  
+    This command is used to create an annotated tag for a specific commit. Annotated tags store extra metadata such as the tagger name, email, date, and a message.
+
+    **Example:**
+    To create an annotated tag named `v1.0.0` for a commit with the hash `abc123` and a message "Release version 1.0.0: Added new features and fixed bugs", you would use the following command:
+
+    ```sh
+    git tag -a v1.0.0 abc123 -m "Release version 1.0.0: Added new features and fixed bugs"
+    ```
+
+3. **`git tag -a <version>`**  
+    This command is used to create a new annotated tag for the current commit.
+
+    **Example:**
+    To create an annotated tag named `v5.5.0` for the current commit, you would use the following command:
+
+    ```sh
+    git tag -a v5.5.0
+    ```
+
+4. **`git push origin <version>`**  
+    This command is used to push a single tag to the remote repository.
+
+    **Example:**
+    To push a tag named `v5.5.0` to the remote repository, you would use the following command:
+
+    ```sh
+    git push origin v5.5.0
+    ```
+
+5. **`git show <tag>`**  
+    This command is used to show information about a particular tag, including the commit it points to and the tag message.
+
+    **Example:**
+    To show information about a tag named `v5.0.0`, you would use the following command:
+
+    ```sh
+    git show v5.0.0
+    ```
+
+### Notes on Tags
+
+- **Lightweight Tags:** These are simple tags that are just pointers to a specific commit. They do not store any additional information beyond the commit hash.
+- **Annotated Tags:** These tags store additional metadata such as the tagger's name, email, date, and a message. They are useful for providing more context about the tagged commit, such as release notes or version information.
+
+## Change Repository Name after Creation
+
+### change the name of your repository from `old-repo-name` to `new-repo-name` on GitHub
+
+- Let's say you want to change the name of your repository from `old-repo-name` to `new-repo-name` on GitHub after it has already been created and pushed to GitHub. Here are the steps to do that
+
+1. **Change the repository name on GitHub**  
+    - Go to your repository on GitHub.
+    - Click on the "Settings" tab.
+    - Under the "Repository name" section, change the name from `old-repo-name` to `new-repo-name`.
+    - Click "Rename" to save the changes.
+
+2. **Check remote after renaming**
+    - After renaming the repository on GitHub, you can check the current remote repositories configured in your local repository by running:
+  
+    ```sh
+     git remote -v
+    ```
+
+    This will show you the current remote `URLs` associated with your `local repository`.
+
+    ```sh
+    origin  https://github.com/your-username/old-repo-name.git (fetch)
+    origin  https://github.com/your-username/old-repo-name.git (push)
+    ```
+
+3. **Now Just rename the local folder to match the new repository name**
+
+4. **Update the remote URL in your local repository**
+
+   ```sh
+   git remote set-url origin https://github.com/yourusername/new-repo-name.git
+   ```
+
+   - This command updates the remote URL for the `origin` remote to point to the new repository name.
+
+5. **Verify the remote URL has been updated**
+
+    ```sh
+    git remote -v
+    ```
+
+    - This will show you the updated remote URLs associated with your local repository.
+
+    ```sh
+     origin  https://github.com/your-username/new-repo-name.git (fetch)
+     origin  https://github.com/your-username/new-repo-name.git (push)
+    ```
 
 ## Miscellaneous
 
