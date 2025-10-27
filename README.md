@@ -26,6 +26,7 @@ This repository contains a comprehensive list of Git commands and their usage ex
   - [Should do and Shouldn't do](#should-do-and-shouldnt-do)
     - [Should Do](#should-do)
     - [Shouldn't Do](#shouldnt-do)
+  - [How to Contribute to an Open Source GitHub Repo](#How-to-Contribute-to-an-Open-Source-GitHub-Repo)
   - [Git Docs](#git-docs)
 
 ## Basic Git Concepts :-
@@ -993,6 +994,102 @@ This repository contains a comprehensive list of Git commands and their usage ex
 3. **Commit Sensitive Information**: Never commit sensitive information like passwords, API keys, or personal data.
 4. **Ignore Conflicts**: Always resolve merge conflicts carefully and test the code after resolving conflicts.
 5. **Use Vague Messages**: Avoid using vague commit messages like "fixed stuff" or "updated code."
+
+## How to Contribute to an Open Source GitHub Repo
+
+### 1) Fork the repository on GitHub (web UI)
+- Go to the repo page on GitHub (the upstream repo).
+- Click **`Fork`** (top-right). This creates github.com/your-username/<repo>. then click **create Fork**. see below image
+<img width="1504" height="1134" alt="fork1" src="https://github.com/user-attachments/assets/61247c74-2d43-463d-9cb7-9b4197a050aa" />
+
+
+**Now you'll see the copy of this repo will be available in your own profile.**
+
+### 2) Clone your fork locally
+- Now choose a folder you work in or create a new one
+- Next, clone your fork from your profile
+  
+  ```sh
+  git clone https://github.com/<your-username>/<repo>.git
+  ```
+- then go inside that folder
+
+  ```sh
+  cd <repo>
+  ```
+### 3) Create a new branch for your fix
+- If you check the branches, you'll see only the  `master` branch
+  ```sh
+  git branch
+  ```
+  **`output:`**
+  
+  ```sh
+  * master
+  ```
+- Create a new branch
+
+  ```sh
+  git switch -c fix/ssl-python313-compat #You can choose based on what you want to contribute, like fix, features, etc.
+  ```
+- make the changes and test locally (important)
+
+### 4) Stage and commit your change
+- add the change file (example)
+  ```sh
+  git add h2csmuggler.py
+  ```
+- commit the message (for example)
+  ```sh
+  git commit -m "compat: use SSLContext on Python 3.13+ with fallback to ssl.wrap_socket for older Pythons"
+  ```
+- **Commit message tips:** Short summary first line, optional longer description in commit body (not necessary for this small fix).
+   
+### 5) Push your branch to your fork
+- push the changes
+  
+  ```sh
+  git push origin fix/ssl-python313-compat
+  ```
+### 6) Open the Pull Request
+- Go to your fork on GitHub: https://github.com/<your-username>/<repo>.
+- You’ll see a Compare & pull request button for the branch — click it.
+  - If not visible: go to the **`Pull requests tab`** → **`New pull request`** → **`set base repository`** to the upstream repo and base branch (main/master), and compare to your branch.
+- Fill PR title & body and Submit the PR.
+
+### 7) After opening the PR — what to expect & do
+- Maintainers may ask questions or request changes. Respond politely, explain your tests.
+- If they request a change, make changes on the same branch, **`git add`** → **`git commit`** → **`git push`** and the `PR` will update automatically.
+
+### 8) Optional niceties (impress reviewers)
+- Add a one-line comment in the code near your change, for example: **`# compatibility: Python 3.13 removed ssl.wrap_socket — use SSLContext`**
+- Add the test command/example run in the PR description
+- If the repo has a CONTRIBUTING.md, mention you followed it.
+
+### 9) Final cleanup (syncing your fork later)
+- If upstream advances, keep your fork in sync:
+- Switches your current branch to master (the main working branch of your fork).
+  
+  ```sh
+  git switch master
+  ```
+- Downloads (fetches) all the latest commits and branches from the original project’s repo (called upstream) — but doesn’t merge them yet.
+  
+  ```sh
+  git fetch upstream
+  ```
+- Merges the latest updates from the original repo’s master branch into your local master branch, keeping your fork up to date.
+
+  ```sh
+  git merge upstream/master
+  ```
+- Uploads (pushes) your newly updated local master branch to your GitHub fork, so it stays in sync online.
+  
+  ```sh
+  git push origin master
+  ```
+  
+- **`In short:`** You’re just updating your fork → to match the latest version of the original repo.
 
 ## Git Docs
 
